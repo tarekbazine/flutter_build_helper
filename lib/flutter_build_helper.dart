@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-// dart build.dart --v=1.3.0+5 --apk
+// dart build.dart --v=1.3.0+5 --apk --out-path="..."
+
 // by default will build only aab
 // if --apk will build an apk also
 
@@ -13,12 +15,14 @@ import 'package:yaml/yaml.dart';
 class BuildParams {
   String versionNumber;
   bool generateApk;
+  bool generateAab;
   String outputPath;
 
   BuildParams(
     this.versionNumber,
     this.generateApk,
     this.outputPath,
+    this.generateAab,
   );
 
   @override
@@ -31,11 +35,13 @@ const VERSION_ARG = 'v';
 const OUTPUT_PATH_ARG = 'out-path';
 
 const APK_FLAG_ARG = 'apk';
+const NO_AAB_FLAG_ARG = 'no-aab';
 
 BuildParams parseAndValidateBuildParams(List<String> arguments) {
   final parser = ArgParser();
 
   parser.addFlag(APK_FLAG_ARG);
+  parser.addFlag(NO_AAB_FLAG_ARG);
 
   parser.addOption(VERSION_ARG, callback: (version) {
     if (version == null || version.isEmpty)
@@ -50,6 +56,7 @@ BuildParams parseAndValidateBuildParams(List<String> arguments) {
     argResults[VERSION_ARG],
     argResults[APK_FLAG_ARG],
     argResults[OUTPUT_PATH_ARG],
+    !argResults[NO_AAB_FLAG_ARG],
   );
 }
 
@@ -60,7 +67,7 @@ void build(BuildParams arg) {
 void buildForAndroid(BuildParams arg) async {
   exitCode = 0; // presume success
 
-  // step 1 - edit version num -> pubspec, config
+  // step - edit version num -> pubspec, config
   final pusSpecPath = './pubspec.yaml';
   await updateLineInFile(
     pusSpecPath,
@@ -72,7 +79,7 @@ void buildForAndroid(BuildParams arg) async {
 
   // todo setup to check stuff
 
-  // step 3 - build then copy to desk (rename)
+  // step - build then copy to desk (rename)
   var outputPath = arg.outputPath == null || arg.outputPath.isEmpty
       ? getHomePath()
       : arg.outputPath;
@@ -85,32 +92,35 @@ void buildForAndroid(BuildParams arg) async {
 
   var outputFileName = '${yaml['name']}_app_v${arg.versionNumber}';
   print(outputFileName);
+  if (arg.generateAab) {
+    print('-------- STARTED AAB -----------');
+    Process process = await Process.start(
+      'flutter build appbundle --target-platform android-arm,android-arm64,android-x64',
+      [],
+      runInShell: true,
+    );
 
-  print('-------- STARTED AAB -----------');
-  Process process = await Process.start(
-    'flutter build appbundle --target-platform android-arm,android-arm64,android-x64',
-    [],
-    runInShell: true,
-  );
+    process.stdout.transform(utf8.decoder).listen((data) {
+      print(data);
+    }).onDone(() {});
 
-  process.stdout.transform(utf8.decoder).listen((data) {
-    print(data);
-  }).onDone(() {});
+    await process.exitCode;
 
-  await process.exitCode;
+    ProcessResult results = await Process.run(
+      'move',
+      [
+        p.join(Directory.current.path,
+            p.normalize('build/app/outputs/bundle/release/app-release.aab')),
+        p.join(p.normalize(outputPath), '${outputFileName}.aab'),
+      ],
+      runInShell: true,
+    );
+    print(results.exitCode);
+    print(results.stdout);
+    print(results.stderr);
 
-  // ProcessResult results = await Process.run(
-  //     'move',
-  //     [
-  //       'D:\\codeLabs\\tamejida\\build\\app\\outputs\\bundle\\release\\app.aab',
-  //       'C:\\Users\\Tarek BAZ\\Desktop\\${outputFileName}.aab'
-  //     ],
-  //     runInShell: true);
-  // print(results.exitCode);
-  // print(results.stdout);
-  // print(results.stderr);
-
-  print('-------- FINISHED AAB -----------');
+    print('-------- FINISHED AAB -----------');
+  }
 
   if (arg.generateApk) {
     print('-------- STARTED APK -----------');
@@ -127,16 +137,18 @@ void buildForAndroid(BuildParams arg) async {
 
     await process.exitCode;
 
-    // ProcessResult results = await Process.run(
-    //     'move',
-    //     [
-    //       'D:\\codeLabs\\tamejida\\build\\app\\outputs\\apk\\release\\app-release.apk',
-    //       'C:\\Users\\Tarek BAZ\\Desktop\\${outputFileName}.apk'
-    //     ],
-    //     runInShell: true);
-    // print(results.exitCode);
-    // print(results.stdout);
-    // print(results.stderr);
+    ProcessResult results = await Process.run(
+      'move',
+      [
+        p.join(Directory.current.path,
+            p.normalize('build/app/outputs/apk/release/app-release.apk')),
+        p.join(p.normalize(outputPath), '${outputFileName}.apk'),
+      ],
+      runInShell: true,
+    );
+    print(results.exitCode);
+    print(results.stdout);
+    print(results.stderr);
 
     print('-------- FINISHED APK -----------');
   }
