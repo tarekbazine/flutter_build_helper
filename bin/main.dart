@@ -4,7 +4,5 @@ void main(List<String> arguments) {
   BuildParams arg = parseAndValidateBuildParams(arguments);
   print(arg);
 
-  // print(introMessage('0.9.0'));
-
   build(arg);
 }
