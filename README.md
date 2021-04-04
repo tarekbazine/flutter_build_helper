@@ -6,14 +6,12 @@ A command-line tool which helps you to build and tag artifacts with ease.
 
 1. Installation
 
-In `pubspec.yaml`, add:  
+In `pubspec.yaml`, add:
 
 ```yml
 dev_dependencies:
   flutter_build_helper: "^0.9.0"
 ```
-
-
 
 2. Usage
 
@@ -32,12 +30,11 @@ with `<OPTIONS>` as :
 Examples :
 
 ```shell
-flutter pub run flutter_build_helper:main --v=1.3.0+5 --apk --no-aab --out-path="..."
+flutter pub run flutter_build_helper:main --v=1.3.0+5 --apk
+```
 
-// by default will build only aab
-// if --apk will build an apk also
-
-// version argument is a string ex :  --v=1.3.0+5
+```shell
+flutter pub run flutter_build_helper:main --v=4.0.9 --apk --no-aab --out-path="..."
 ```
 
 ---
@@ -50,3 +47,8 @@ flutter pub run flutter_build_helper:main --v=1.3.0+5 --apk --no-aab --out-path=
 - [ ] A customizable step to edit stuff before build
 - [ ] A customizable step to check stuff
 - [ ] migrate to https://github.com/fluttercommunity
+
+---
+
+Feel free to star the repo if you like it. :)
+
