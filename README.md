@@ -2,14 +2,51 @@
 
 A command-line tool which helps you to build and tag artifacts with ease.
 
-## Getting Started
+## Guide
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+1. Installation
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In `pubspec.yaml`, add:  
 
+```yml
+dev_dependencies:
+  flutter_build_helper: "^0.9.0"
+```
+
+
+
+2. Usage
+
+```shell
+flutter pub get
+flutter pub run flutter_build_helper:main <OPTIONS>
+```
+
+with `<OPTIONS>` as :
+
+- `--version=VERSION_NB` (mandatory)
+- `--out-path=PATH` (optional) by default the output would be in `Documents` folder of the current user.
+- `--apk` (optional flag) means build an apk also
+- `--no-aab` (optional flag) means do not generate an aab
+
+Examples :
+
+```shell
+flutter pub run flutter_build_helper:main --v=1.3.0+5 --apk --no-aab --out-path="..."
+
+// by default will build only aab
+// if --apk will build an apk also
+
+// version argument is a string ex :  --v=1.3.0+5
+```
+
+---
+
+## Road map
+
+- [ ] --help option
+- [ ] publish to Pub ( into in reddit )
+- [ ] Ios build artifact
+- [ ] A customizable step to edit stuff before build
+- [ ] A customizable step to check stuff
+- [ ] migrate to https://github.com/fluttercommunity

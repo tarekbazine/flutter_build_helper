@@ -5,13 +5,6 @@ import 'package:args/args.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-// dart build.dart --v=1.3.0+5 --apk --out-path="..."
-
-// by default will build only aab
-// if --apk will build an apk also
-
-// version argument is a string ex :  --v=1.3.0+5
-
 class BuildParams {
   String versionNumber;
   bool generateApk;
