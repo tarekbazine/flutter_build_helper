@@ -1,4 +1,4 @@
-# flutter_build_helper
+# [flutter_build_helper](https://pub.dev/packages/flutter_build_helper)
 
 A command-line tool which helps you to build and tag artifacts with ease.
 
@@ -52,3 +52,5 @@ flutter pub run flutter_build_helper:main --v=4.0.9 --apk --no-aab --out-path=".
 
 Feel free to star the repo if you like it. :)
 
+
+[]: https://pub.dev/packages/flutter_build_helper
