@@ -10,7 +10,7 @@ In `pubspec.yaml`, add:
 
 ```yml
 dev_dependencies:
-  flutter_build_helper: "^0.9.0"
+  flutter_build_helper: "^0.2.0"
 ```
 
 2. Usage

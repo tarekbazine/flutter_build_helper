@@ -9,7 +9,7 @@ class BuildParams {
   String versionNumber;
   bool generateApk;
   bool generateAab;
-  String outputPath;
+  String? outputPath;
 
   BuildParams(
     this.versionNumber,
@@ -73,9 +73,12 @@ void buildForAndroid(BuildParams arg) async {
   // todo setup to check stuff
 
   // step - build then copy to desk (rename)
-  var outputPath = arg.outputPath == null || arg.outputPath.isEmpty
+  var outputPath = (arg.outputPath?.isEmpty ?? true)
       ? getHomePath()
       : arg.outputPath;
+  if ( outputPath == null) {
+    throw "outputPath is was not set!";
+  }
 
   print(outputPath);
 
@@ -164,7 +167,7 @@ Future updateLineInFile(
   return File(filePath).writeAsString(lines.join('\n'));
 }
 
-String getHomePath() {
+String? getHomePath() {
   Map<String, String> envVars = Platform.environment;
 
   if (Platform.isMacOS) {
