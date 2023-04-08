@@ -5,24 +5,7 @@ import 'package:args/args.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-class BuildParams {
-  String versionNumber;
-  bool generateApk;
-  bool generateAab;
-  String? outputPath;
-
-  BuildParams(
-    this.versionNumber,
-    this.generateApk,
-    this.outputPath,
-    this.generateAab,
-  );
-
-  @override
-  String toString() {
-    return 'BuildParams{versionNumber: $versionNumber, generateApk: $generateApk}';
-  }
-}
+import 'build_params.dart';
 
 const VERSION_ARG = 'v';
 const OUTPUT_PATH_ARG = 'out-path';

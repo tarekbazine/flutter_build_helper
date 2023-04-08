@@ -2,6 +2,6 @@
 
 * build, move and tag artifacts.
 
-## 0.2.0
+## 0.2.1
 
 * null safety and packages upgrade.
