@@ -1,10 +1,10 @@
 name: flutter_build_helper
 description: A command-line tool which helps you to build and tag artifacts with ease.
-version: 0.2.1
+version: 0.2.2
 repository: https://github.com/tarekbazine/flutter_build_helper
 
 environment:
-  sdk: '>=2.12.0 <4.0.0'
+  sdk: '>=2.19.6 <3.0.0'
   flutter: ">=1.20.0"
 
 dependencies:
